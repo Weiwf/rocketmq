@@ -536,17 +536,27 @@ public class MQClientInstance {
         }
     }
 
-    public boolean updateTopicRouteInfoFromNameServer(final String topic, boolean isDefault, DefaultMQProducer defaultMQProducer) {
+    public boolean updateTopicRouteInfoFromNameServer(final String topic, boolean isDefault,
+                                                      DefaultMQProducer defaultMQProducer) {
         try {
             if (this.lockNamesrv.tryLock(LOCK_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS)) {
                 try {
                     TopicRouteData topicRouteData;
                     if (isDefault && defaultMQProducer != null) {
-                        topicRouteData = this.mQClientAPIImpl.getDefaultTopicRouteInfoFromNameServer(defaultMQProducer.getCreateTopicKey(),
+                        /**
+                         * TODO 获取路由数据
+                         */
+                        //从namesever中获取路由数据
+                        topicRouteData = this.mQClientAPIImpl
+                                .getDefaultTopicRouteInfoFromNameServer(defaultMQProducer.getCreateTopicKey(),
                             1000 * 3);
                         if (topicRouteData != null) {
                             for (QueueData data : topicRouteData.getQueueDatas()) {
-                                int queueNums = Math.min(defaultMQProducer.getDefaultTopicQueueNums(), data.getReadQueueNums());
+                                /**
+                                 * TODO 为什么取二者的较小值
+                                 */
+                                int queueNums = Math.min(defaultMQProducer.getDefaultTopicQueueNums(),
+                                        data.getReadQueueNums());
                                 data.setReadQueueNums(queueNums);
                                 data.setWriteQueueNums(queueNums);
                             }
@@ -556,14 +566,26 @@ public class MQClientInstance {
                     }
                     if (topicRouteData != null) {
                         TopicRouteData old = this.topicRouteTable.get(topic);
+                        /**
+                         * todo 判断路由数据是否改变
+                         */
                         boolean changed = topicRouteDataIsChange(old, topicRouteData);
                         if (!changed) {
+                            /**
+                             * todo 判断是否需要更新路由信息
+                             */
                             changed = this.isNeedUpdateTopicRouteInfo(topic);
                         } else {
                             log.info("the topic[{}] route info changed, old[{}] ,new[{}]", topic, old, topicRouteData);
                         }
 
                         if (changed) {
+                            /**
+                             * 我已经心不在焉了
+                             *
+                             * 当我写下这段注释的时候，我和銮姐说我昨晚梦见她了，我在忐忑地等待着她的回复，然后告诉她我想她。
+                             *
+                             */
                             TopicRouteData cloneTopicRouteData = topicRouteData.cloneTopicRouteData();
 
                             for (BrokerData bd : topicRouteData.getBrokerDatas()) {
