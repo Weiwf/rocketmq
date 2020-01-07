@@ -25,6 +25,18 @@ import org.apache.rocketmq.remoting.common.RemotingHelper;
 /**
  * This class demonstrates how to send messages to brokers using provided {@link DefaultMQProducer}.
  */
+
+/**
+ * 1.同步发送，同步发送需要等到消息发送成功返回结果。
+ */
+
+/**
+ * 在实际使用场景中，利用何种发送方式，可以总结如下：
+ *
+ * 当发送的消息不重要时，采用one-way方式，以提高吞吐量；
+ * 当发送的消息很重要时，且对响应时间不敏感的时候采用sync方式;
+ * 当发送的消息很重要，且对响应时间非常敏感的时候采用async方式；
+ */
 public class Producer {
     public static void main(String[] args) throws MQClientException, InterruptedException {
 

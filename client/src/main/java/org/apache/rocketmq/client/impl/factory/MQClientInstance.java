@@ -580,12 +580,7 @@ public class MQClientInstance {
                         }
 
                         if (changed) {
-                            /**
-                             * 我已经心不在焉了
-                             *
-                             * 当我写下这段注释的时候，我和銮姐说我昨晚梦见她了，我在忐忑地等待着她的回复，然后告诉她我想她。
-                             *
-                             */
+
                             TopicRouteData cloneTopicRouteData = topicRouteData.cloneTopicRouteData();
 
                             for (BrokerData bd : topicRouteData.getBrokerDatas()) {

@@ -29,6 +29,9 @@ import org.apache.rocketmq.common.message.MessageQueue;
 import org.apache.rocketmq.remoting.common.RemotingHelper;
 import org.apache.rocketmq.remoting.exception.RemotingException;
 
+/**
+ * 4.顺序消息
+ */
 public class Producer {
     public static void main(String[] args) throws UnsupportedEncodingException {
         try {
@@ -42,7 +45,7 @@ public class Producer {
                     new Message("TopicTestjjj", tags[i % tags.length], "KEY" + i,
                         ("Hello RocketMQ " + i).getBytes(RemotingHelper.DEFAULT_CHARSET));
                 SendResult sendResult = producer.send(msg, new MessageQueueSelector() {
-                    @Override
+                    @Override//arg是传入的参数，这里为orderId
                     public MessageQueue select(List<MessageQueue> mqs, Message msg, Object arg) {
                         Integer id = (Integer) arg;
                         int index = id % mqs.size();
